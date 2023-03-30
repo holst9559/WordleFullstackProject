@@ -23,7 +23,9 @@ function App() {
           Info
         </a>
       </nav>
-      <div className="body bg-gray-950 h-screen"></div>
+      <div className="body bg-gray-950 h-screen">
+        <GameBoard />
+      </div>
     </div>
   );
 }
