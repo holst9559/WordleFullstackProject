@@ -7,10 +7,21 @@ import "./App.css";
 // export const AppContext = createContext();
 
 function App() {
+  const [gameState, setGameState] = useState("playing");
   const [attemptCount, setAttemptCount] = useState(0);
   const [currentResult, setCurrentResult] = useState();
   const [guessArray, setGuessArray] = useState([]);
-  //const [board, setBoard] = useState(boardDefault);
+  const [settings, setSettings] = useState();
+
+  /*
+useEffect(() => {
+  async function startGame() {
+    const res = await //API FETCH GAME SETTINGS
+
+    
+  }
+})
+*/
 
   async function handleSubmit(formGuess) {
     /*
