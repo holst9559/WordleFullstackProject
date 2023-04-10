@@ -2,20 +2,36 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import GameBoard from "./components/GameBoard";
-import KeyInput from "./components/KeyInput";
+import GuessInput from "./components/GuessInput";
 import "./App.css";
 
 // export const AppContext = createContext();
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [currentResult, setCurrentResult] = useState();
+  const [guessArray, setGuessArray] = useState([]);
   //const [board, setBoard] = useState(boardDefault);
 
-  useEffect(() => {
-    window.addEventListener("keyup");
-    window.removeEventListener("keyup");
-  });
+  async function handleSubmit(formGuess) {
+    /*
+    const res = await fetch("POST GUESS TO API", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ formGuess }),
+    });
 
+    const data = await res.json();
+    */
+    const data = formGuess;
+    setCurrentResult(data);
+    setAttemptCount(attemptCount + 1);
+
+    const updateGuesses = [...guessArray, data];
+    setGuessArray(updateGuesses);
+  }
   return (
     <div className="App h-screen w-screen bg-gray-800">
       <header className="flex items-center flex-row h-20 border-b-2  bg-gray-800 opacity-90">
@@ -33,10 +49,10 @@ function App() {
           Info
         </a>
       </nav>
-      <GameBoard />
+      <GameBoard guessArray={guessArray} />
 
       <div>
-        <KeyInput />
+        <GuessInput onGuess={handleSubmit} />
       </div>
     </div>
   );
