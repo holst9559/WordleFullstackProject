@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
+import GameBoard from "./components/GameBoard";
+import KeyInput from "./components/KeyInput";
 import "./App.css";
+
+// export const AppContext = createContext();
 
 function App() {
   const [count, setCount] = useState(0);
+  //const [board, setBoard] = useState(boardDefault);
+
+  useEffect(() => {
+    window.addEventListener("keyup");
+    window.removeEventListener("keyup");
+  });
 
   return (
     <div className="App h-screen w-screen bg-gray-800">
@@ -23,42 +33,10 @@ function App() {
           Info
         </a>
       </nav>
-      <div className="bg-gray-800 max-h-screen max-w-screen mt-10 mb-20">
-        <div className="flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-3">
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            K
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            A
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            F
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            F
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            E
-          </div>
-        </div>
+      <GameBoard />
 
-        <div className="flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-3">
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            K
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            A
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            F
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            K
-          </div>
-          <div className="letter h-16 w-16 border-2  text-white text-center text-5xl">
-            E
-          </div>
-        </div>
+      <div>
+        <KeyInput />
       </div>
     </div>
   );
