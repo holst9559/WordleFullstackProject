@@ -35,16 +35,18 @@ function App() {
     <div className="App h-screen w-screen bg-gray-800">
       <header className="flex items-center flex-row h-20 border-b-2  bg-gray-800 opacity-90">
         <a
-          className="font-bold text-6xl ml-auto mr-auto text-white p-10"
+          className="font-bold text-6xl ml-auto mr-auto text-white p-10 hover:opacity-50"
           href="/">
           WORDLE
         </a>
       </header>
       <nav className="bg-gray-800 flex items-center flex-row justify-center pt-2 opacity-90">
-        <a className=" text-white text-3xl pr-6" href="/highscores">
+        <a
+          className=" text-white text-3xl pr-6 hover:opacity-50"
+          href="/highscores">
           Highscores
         </a>
-        <a className="text-white text-3xl pl-6" href="/info">
+        <a className="text-white text-3xl pl-6 hover:opacity-50" href="/info">
           Info
         </a>
       </nav>

@@ -14,7 +14,7 @@ export default function GuessInput(onGuess) {
           e.target.reset();
         }}>
         <input
-          className="guess-input text-black w-80 text-5xl"
+          className="guess-input shadow-2xl text-black w-80 text-5xl rounded-2xl pl-1"
           type="text"
           placeholder="Guess....."
           onChange={(e) => setText(e.target.value)}
@@ -22,7 +22,7 @@ export default function GuessInput(onGuess) {
           //maxLength={length}
           required></input>
         <button
-          className="guess-btn border-4 text-5xl ml-2 shadow-lg text-white"
+          className="guess-btn border-4 shadow-2xl text-5xl font-semibold ml-2 text-gray-700 bg-white rounded-2xl hover:opacity-50"
           type="submit">
           GUESS
         </button>
