@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import GameBoard from "./components/GameBoard";
 import GuessInput from "./components/GuessInput";
+import MenuButton from "./components/MenuButton";
 import "./App.css";
 
 // export const AppContext = createContext();
@@ -49,6 +48,7 @@ function App() {
           Info
         </a>
       </nav>
+      <MenuButton />
       <GameBoard guessArray={guessArray} />
 
       <div>

@@ -11,6 +11,7 @@ export default function GuessInput(onGuess) {
         onSubmit={(e) => {
           e.preventDefault();
           onGuess.onGuess(text);
+          e.target.reset();
         }}>
         <input
           className="guess-input text-black w-80 text-5xl"
