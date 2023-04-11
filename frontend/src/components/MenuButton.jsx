@@ -10,7 +10,19 @@ export default function MenuButton() {
   };
 
   async function handleForm() {
-    //POST SETTINGS TO API
+    /*
+    const res = await fetch("http://localhost:5173/api/settings", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: { value, checked },
+    });
+
+    const data = await res.json();
+
+    console.log(data);
+    */
   }
   return (
     <>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//import { AppContext } from "../App";
 
 export default function GuessInput(onGuess) {
   const [text, setText] = useState("");
@@ -18,7 +17,6 @@ export default function GuessInput(onGuess) {
     setText(guessCheck.toUpperCase());
   };
 
-  //console.log(text?.match(validGuess));
   return (
     <div>
       <form

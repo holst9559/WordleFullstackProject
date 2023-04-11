@@ -9,7 +9,6 @@ export default function GameBoard(guessArray) {
     const split = guess.split("");
     splitArray.push(split);
   });
-
   if (array.length <= 5) {
     return (
       <div className="bg-gray-800 max-h-screen max-w-screen mt-10 mb-20">
