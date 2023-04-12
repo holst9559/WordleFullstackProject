@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function MenuButton({ settings, onSave }) {
+export default function MenuButton({ settings, onSave, onRestart }) {
   const { wordLengthSettings, checkedSettings } = settings;
   const [modal, setModal] = useState(false);
   const [wordLength, setWordLength] = useState(3);
@@ -9,6 +9,7 @@ export default function MenuButton({ settings, onSave }) {
   const toggleModal = () => {
     setModal(!modal);
   };
+
   return (
     <>
       <button className="fixed top-3 left-3 hover:opacity-50">
@@ -20,7 +21,7 @@ export default function MenuButton({ settings, onSave }) {
       </button>
 
       {modal && (
-        <div className="fixed inset-0 flex justify-center tiems-center bg-opacity-30 backdrop-blur-sm">
+        <div className="fixed inset-0 flex justify-center bg-opacity-30 backdrop-blur-sm">
           <div className=""></div>
           <div className="p-2 mt-32 rounded-xl w-2/5 h-2/5 bg-white">
             <h1 className="text-center font-semibold text-6xl text-gray-700 pt-5">
@@ -32,6 +33,8 @@ export default function MenuButton({ settings, onSave }) {
                   e.preventDefault();
                   const settingsData = { wordLength, checked };
                   onSave(settingsData);
+                  onRestart(true);
+                  toggleModal();
                 }}>
                 <div>
                   <label

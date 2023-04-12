@@ -6,30 +6,50 @@ import GameOver from "./components/GameOver";
 import GetWord from "./components/GetWord";
 import { boardDefault } from "./components/BoardDefault";
 import "./App.css";
+import ResetPrompt from "./components/ResetPrompt";
 
 export const AppContext = createContext();
 
 function App() {
-  const [board, setBoard] = useState(boardDefault);
+  const boardReseter = [
+    ["", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", ""],
+  ];
+  const [board, setBoard] = useState(boardReseter);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [correctWord, setCorrectWord] = useState("");
   const [disabledLetters, setDisabledLetters] = useState([]);
-  const [guessArray, setGuessArray] = useState([]);
   const [settings, setSettings] = useState({ wordLength: 5, checked: false });
   const [gameGrid, setGameGrid] = useState([settings.wordLength, 6]);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedWord: false,
   });
+  const [gameRunning, setGameRunning] = useState(false);
+  const [gameRestart, setGameRestart] = useState(false);
+  const [boardReset, setBoardReset] = useState(false);
+
+  async function startGame() {
+    if (gameRestart === true && gameRunning === true) {
+      setCurrAttempt({ attempt: 0, letter: 0 });
+      setBoardReset(true);
+    } else if (gameRunning === false) {
+      setGameRunning(true);
+      GetWord({ settings }).then((words) => {
+        setCorrectWord(words.data);
+      });
+    }
+  }
 
   useEffect(() => {
-    GetWord({ settings }).then((words) => {
-      setCorrectWord(words.data);
-    });
+    startGame();
   }, [settings]);
 
   console.log(correctWord);
-
   const onEnter = () => {
     if (currAttempt.letter !== settings.wordLength) return;
 
@@ -59,14 +79,25 @@ function App() {
 
   const onSelectLetter = (key) => {
     if (currAttempt.letter >= settings.wordLength) return;
-    const newBoard = [...board];
-    newBoard[currAttempt.attempt][currAttempt.letter] = key;
-    console.log(board);
-    setBoard(newBoard);
-    setCurrAttempt({
-      attempt: currAttempt.attempt,
-      letter: currAttempt.letter + 1,
-    });
+    if (boardReset === true && currAttempt.letter === 0) {
+      setBoardReset(false);
+      setBoard(boardReseter);
+      const newBoard = [...boardReseter];
+      newBoard[currAttempt.attempt][currAttempt.letter] = key;
+      setBoard(newBoard);
+      setCurrAttempt({
+        attempt: currAttempt.attempt,
+        letter: currAttempt.letter + 1,
+      });
+    } else if (boardReset === false) {
+      const newBoard = [...board];
+      newBoard[currAttempt.attempt][currAttempt.letter] = key;
+      setBoard(newBoard);
+      setCurrAttempt({
+        attempt: currAttempt.attempt,
+        letter: currAttempt.letter + 1,
+      });
+    }
   };
 
   async function handleSubmit(guessInput) {
@@ -79,12 +110,6 @@ function App() {
     });
 
     const data = await res.json();
-
-    setCurrentResult(data.guess);
-    setAttemptCount(attemptCount + 1);
-
-    const updateGuesses = [...guessArray, data.guess];
-    setGuessArray(updateGuesses);
 
     return data;
   }
@@ -115,6 +140,9 @@ function App() {
           setSettings(data);
           setGameGrid([settings.wordLength, 6]);
         }}
+        onRestart={(data) => {
+          setGameRestart(data);
+        }}
       />
       <AppContext.Provider
         value={{
@@ -129,8 +157,18 @@ function App() {
           setDisabledLetters,
           disabledLetters,
           gameOver,
+          boardReset,
         }}>
-        <Board settings={settings} />
+        {!gameRestart ? (
+          <Board settings={settings} />
+        ) : (
+          <ResetPrompt
+            gameRestart={gameRestart}
+            onRestart={(data) => {
+              setGameRestart(data);
+            }}
+          />
+        )}
         {gameOver.gameOver ? <GameOver /> : <Keyboard />}
       </AppContext.Provider>
     </div>
