@@ -1,29 +1,14 @@
 import React, { useState } from "react";
 
-export default function MenuButton() {
+export default function MenuButton({ settings, onSave }) {
+  const { wordLengthSettings, checkedSettings } = settings;
   const [modal, setModal] = useState(false);
-  const [value, setValue] = useState();
-  const [checked, setChecked] = useState(true);
+  const [wordLength, setWordLength] = useState(3);
+  const [checked, setChecked] = useState(checkedSettings ? true : false);
 
   const toggleModal = () => {
     setModal(!modal);
   };
-
-  async function handleForm() {
-    /*
-    const res = await fetch("http://localhost:5173/api/settings", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { value, checked },
-    });
-
-    const data = await res.json();
-
-    console.log(data);
-    */
-  }
   return (
     <>
       <button className="fixed top-3 left-3 hover:opacity-50">
@@ -42,7 +27,12 @@ export default function MenuButton() {
               Settings
             </h1>
             <div className="text-center p-7">
-              <form>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const settingsData = { wordLength, checked };
+                  onSave(settingsData);
+                }}>
                 <div>
                   <label
                     className="text-3xl text-gray-700 p-2"
@@ -52,7 +42,8 @@ export default function MenuButton() {
                   <select
                     className="mr-2 border-2 border-gray-700 rounded-xl h-10 w-10 text-gray-700 font-semibold text-2xl"
                     id="word-length"
-                    onChange={(e) => setValue(e.target.value)}>
+                    value={wordLength}
+                    onChange={(e) => setWordLength(parseInt(e.target.value))}>
                     <option>3</option>
                     <option>4</option>
                     <option>5</option>
@@ -75,21 +66,19 @@ export default function MenuButton() {
                     onChange={(e) => setChecked(e.target.checked)}
                   />
                 </div>
+                <div className="text-center pt-16">
+                  <button
+                    className="border-2 text-4xl p-1 mr-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
+                    type="submit">
+                    Save
+                  </button>
+                  <button
+                    className="border-2 text-4xl p-1 ml-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
+                    onClick={toggleModal}>
+                    Close
+                  </button>
+                </div>
               </form>
-            </div>
-            <div className="text-center pt-16">
-              <button
-                className="border-2 text-4xl p-1 mr-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
-                type="submit"
-                onClick={handleForm}>
-                Save
-              </button>
-
-              <button
-                className="border-2 text-4xl p-1 ml-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
-                onClick={toggleModal}>
-                Close
-              </button>
             </div>
           </div>
         </div>

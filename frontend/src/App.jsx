@@ -1,47 +1,94 @@
-import { useEffect, useState } from "react";
-import GameBoard from "./components/GameBoard";
-import GuessInput from "./components/GuessInput";
+import { useEffect, useState, createContext } from "react";
+import Board from "./components/GameBoard";
 import MenuButton from "./components/MenuButton";
+import Keyboard from "./components/Keyboard";
+import GameOver from "./components/GameOver";
+import GetWord from "./components/GetWord";
+import { boardDefault } from "./components/BoardDefault";
 import "./App.css";
 
-// export const AppContext = createContext();
+export const AppContext = createContext();
 
 function App() {
-  const [gameState, setGameState] = useState("playing");
-  const [attemptCount, setAttemptCount] = useState(0);
-  const [currentResult, setCurrentResult] = useState();
+  const [board, setBoard] = useState(boardDefault);
+  const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
+  const [correctWord, setCorrectWord] = useState("");
+  const [disabledLetters, setDisabledLetters] = useState([]);
   const [guessArray, setGuessArray] = useState([]);
-  const [settings, setSettings] = useState();
+  const [settings, setSettings] = useState({ wordLength: 5, checked: false });
+  const [gameGrid, setGameGrid] = useState([settings.wordLength, 6]);
+  const [gameOver, setGameOver] = useState({
+    gameOver: false,
+    guessedWord: false,
+  });
 
-  /*
-useEffect(() => {
-  async function startGame() {
-    const res = await //API FETCH GAME SETTINGS
+  useEffect(() => {
+    GetWord({ settings }).then((words) => {
+      setCorrectWord(words.data);
+    });
+  }, [settings]);
 
-    
-  }
-})
-*/
+  console.log(correctWord);
 
-  async function handleSubmit(formGuess) {
-    /*
-    const res = await fetch("POST GUESS TO API", {
-      method: "post",
+  const onEnter = () => {
+    if (currAttempt.letter !== settings.wordLength) return;
+
+    let currWord = "";
+    for (let i = 0; i < settings.wordLength; i++) {
+      currWord += board[currAttempt.attempt][i];
+    }
+
+    setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
+    if (currWord.toLocaleLowerCase() === correctWord) {
+      setGameOver({ gameOver: true, guessedWord: true });
+      return;
+    }
+    if (currAttempt.attempt === 5) {
+      setGameOver({ gameOver: true, guessedWord: false });
+      return;
+    }
+  };
+
+  const onDelete = () => {
+    if (currAttempt.letter === 0) return;
+    const newBoard = [...board];
+    newBoard[currAttempt.attempt][currAttempt.letter - 1] = "";
+    setBoard(newBoard);
+    setCurrAttempt({ ...currAttempt, letter: currAttempt.letter - 1 });
+  };
+
+  const onSelectLetter = (key) => {
+    if (currAttempt.letter >= settings.wordLength) return;
+    const newBoard = [...board];
+    newBoard[currAttempt.attempt][currAttempt.letter] = key;
+    console.log(board);
+    setBoard(newBoard);
+    setCurrAttempt({
+      attempt: currAttempt.attempt,
+      letter: currAttempt.letter + 1,
+    });
+  };
+
+  async function handleSubmit(guessInput) {
+    const res = await fetch("/api/guess", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ formGuess }),
+      body: JSON.stringify({ guessInput, correctWord }),
     });
 
     const data = await res.json();
-    */
-    const data = formGuess;
-    setCurrentResult(data);
+
+    setCurrentResult(data.guess);
     setAttemptCount(attemptCount + 1);
 
-    const updateGuesses = [...guessArray, data];
+    const updateGuesses = [...guessArray, data.guess];
     setGuessArray(updateGuesses);
+
+    return data;
   }
+
   return (
     <div className="App h-screen w-screen bg-gray-800">
       <header className="flex items-center flex-row h-20 border-b-2  bg-gray-800 opacity-90">
@@ -61,14 +108,40 @@ useEffect(() => {
           Info
         </a>
       </nav>
-      <MenuButton />
-      <GameBoard guessArray={guessArray} />
 
-      <div>
-        <GuessInput onGuess={handleSubmit} />
-      </div>
+      <MenuButton
+        settings={settings}
+        onSave={(data) => {
+          setSettings(data);
+          setGameGrid([settings.wordLength, 6]);
+        }}
+      />
+      <AppContext.Provider
+        value={{
+          board,
+          setBoard,
+          currAttempt,
+          setCurrAttempt,
+          correctWord,
+          onSelectLetter,
+          onDelete,
+          onEnter,
+          setDisabledLetters,
+          disabledLetters,
+          gameOver,
+        }}>
+        <Board settings={settings} />
+        {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+      </AppContext.Provider>
     </div>
   );
 }
 
 export default App;
+
+/* <GameBoard guessArray={guessArray} settings={gameGrid} />
+
+      <div>
+        <GuessInput onGuess={handleSubmit} settings={settings} />
+      </div>
+      */
