@@ -1,9 +1,9 @@
-import { guessObject } from "./guessObject";
+import { guessObject } from "./guessObject.js";
 
 const answerInput = "Kaffe";
 const guessInput = "Affke";
 
-export default function algoA(guessInput, answerInput) {
+export default function guessingGame(guessInput, answerInput) {
   const resultArray = [new Array(guessInput.length)];
 
   const guess = guessInput.toLowerCase();
@@ -63,4 +63,3 @@ export default function algoA(guessInput, answerInput) {
   console.log(resultArray);
   return resultArray;
 }
-algoA(guessInput, answerInput);

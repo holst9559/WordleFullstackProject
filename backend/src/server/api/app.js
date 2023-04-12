@@ -3,6 +3,7 @@ import { engine } from "express-handlebars";
 import mongoose from "mongoose";
 import fetchWordList from "../../controllers/fetchWordList.js";
 import randomWord from "../../controllers/randomWord.js";
+import guessingGame from "../../controllers/guessingGame.js";
 
 // import { Task } from "../database/mongoDB.js";
 const app = express();
@@ -22,9 +23,10 @@ app.get("/info", (req, res) => {
 });
 
 app.post("/api/guess", (req, res) => {
-  console.log("GUESS");
-  const guess = req.body.guessInput;
-  res.status(200);
+  const guess = req.body.dataSend.guessInput.join("").toString();
+  const correctWord = req.body.dataSend.correctWord;
+  const results = guessingGame(guess, correctWord);
+  res.status(200).send(results);
 });
 
 app.post("/api/secret", async (req, res) => {

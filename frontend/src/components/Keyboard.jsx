@@ -18,7 +18,6 @@ export default function Keyboard() {
 
   const handleKeyboard = useCallback(
     (event) => {
-      console.log(event.key);
       if (gameOver.gameOver) return;
       if (event.key === "Enter") {
         onEnter();

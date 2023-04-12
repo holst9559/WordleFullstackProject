@@ -1,61 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import Letter from "./Letter";
 
-export default function Board({ settings }) {
+export default function Board({ settings, onMerge }) {
+  const [word, setWord] = useState([]);
   const length = settings.wordLength;
 
+  let wordArray = [];
+  function merge(letter) {
+    wordArray.push(letter);
+    if (wordArray.length === length) {
+      setWord(wordArray);
+      wordArray = [];
+    }
+  }
+  onMerge(word);
   function renderBoard3(val) {
     return (
       <div className="row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-        <Letter letterPos={0} attemptVal={val} />
-        <Letter letterPos={1} attemptVal={val} />
-        <Letter letterPos={2} attemptVal={val} />
+        <Letter letterPos={0} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={1} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={2} attemptVal={val} onLetter={merge} />
       </div>
     );
   }
   function renderBoard4(val) {
     return (
       <div className="row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-        <Letter letterPos={0} attemptVal={val} />
-        <Letter letterPos={1} attemptVal={val} />
-        <Letter letterPos={2} attemptVal={val} />
-        <Letter letterPos={3} attemptVal={val} />
+        <Letter letterPos={0} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={1} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={2} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={3} attemptVal={val} onLetter={merge} />
       </div>
     );
   }
   function renderBoard5(val) {
     return (
       <div className="row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-        <Letter letterPos={0} attemptVal={val} />
-        <Letter letterPos={1} attemptVal={val} />
-        <Letter letterPos={2} attemptVal={val} />
-        <Letter letterPos={3} attemptVal={val} />
-        <Letter letterPos={4} attemptVal={val} />
+        <Letter letterPos={0} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={1} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={2} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={3} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={4} attemptVal={val} onLetter={merge} />
       </div>
     );
   }
   function renderBoard6(val) {
     return (
       <div className="row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-        <Letter letterPos={0} attemptVal={val} />
-        <Letter letterPos={1} attemptVal={val} />
-        <Letter letterPos={2} attemptVal={val} />
-        <Letter letterPos={3} attemptVal={val} />
-        <Letter letterPos={4} attemptVal={val} />
-        <Letter letterPos={5} attemptVal={val} />
+        <Letter letterPos={0} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={1} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={2} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={3} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={4} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={5} attemptVal={val} onLetter={merge} />
       </div>
     );
   }
   function renderBoard7(val) {
     return (
       <div className="row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-        <Letter letterPos={0} attemptVal={val} />
-        <Letter letterPos={1} attemptVal={val} />
-        <Letter letterPos={2} attemptVal={val} />
-        <Letter letterPos={3} attemptVal={val} />
-        <Letter letterPos={4} attemptVal={val} />
-        <Letter letterPos={5} attemptVal={val} />
-        <Letter letterPos={6} attemptVal={val} />
+        <Letter letterPos={0} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={1} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={2} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={3} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={4} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={5} attemptVal={val} onLetter={merge} />
+        <Letter letterPos={6} attemptVal={val} onLetter={merge} />
       </div>
     );
   }

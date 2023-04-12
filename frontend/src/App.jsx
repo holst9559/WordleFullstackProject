@@ -32,6 +32,7 @@ function App() {
   const [gameRunning, setGameRunning] = useState(false);
   const [gameRestart, setGameRestart] = useState(false);
   const [boardReset, setBoardReset] = useState(false);
+  const [guessInput, setGuessInput] = useState([]);
 
   async function startGame() {
     if (gameRestart === true && gameRunning === true) {
@@ -49,10 +50,12 @@ function App() {
     startGame();
   }, [settings]);
 
-  console.log(correctWord);
+  useEffect(() => {
+    handleSubmit(guessInput);
+  }, [guessInput]);
+
   const onEnter = () => {
     if (currAttempt.letter !== settings.wordLength) return;
-
     let currWord = "";
     for (let i = 0; i < settings.wordLength; i++) {
       currWord += board[currAttempt.attempt][i];
@@ -101,17 +104,24 @@ function App() {
   };
 
   async function handleSubmit(guessInput) {
-    const res = await fetch("/api/guess", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ guessInput, correctWord }),
-    });
+    if (currAttempt.attempt > 0 && currAttempt.attempt < 6) {
+      const dataSend = {
+        guessInput,
+        correctWord,
+      };
+      const res = await fetch("/api/guess", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ dataSend }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      console.log(data);
 
-    return data;
+      return data;
+    }
   }
 
   return (
@@ -160,7 +170,12 @@ function App() {
           boardReset,
         }}>
         {!gameRestart ? (
-          <Board settings={settings} />
+          <Board
+            settings={settings}
+            onMerge={(data) => {
+              setGuessInput(data);
+            }}
+          />
         ) : (
           <ResetPrompt
             gameRestart={gameRestart}
