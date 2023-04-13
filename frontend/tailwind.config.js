@@ -5,14 +5,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        correct: "#12e62b",
-        misplaced: "#e6e612",
-        incorrect: "#e61212",
+        Correct: "#12e62b",
+        Misplaced: "#e6e612",
+        Incorrect: "#e61212",
       },
       backgroundColors: {
-        correct: "#12e62b",
-        misplaced: "#e6e612",
-        incorrect: "#e61212",
+        Correct: "#12e62b",
+        Misplaced: "#e6e612",
+        Incorrect: "#e61212",
       },
     },
   },

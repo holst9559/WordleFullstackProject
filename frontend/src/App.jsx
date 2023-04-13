@@ -1,25 +1,45 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, useCallback } from "react";
 import Board from "./components/GameBoard";
 import MenuButton from "./components/MenuButton";
-import Keyboard from "./components/Keyboard";
 import GameOver from "./components/GameOver";
-import GetWord from "./components/GetWord";
-import { boardDefault } from "./components/BoardDefault";
+import GetWord from "./api/GetWord";
 import "./App.css";
 import ResetPrompt from "./components/ResetPrompt";
+import InputField from "./components/InputField";
+import Timer from "./components/Timer";
 
 export const AppContext = createContext();
 
 function App() {
-  const boardReseter = [
-    ["", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", ""],
-  ];
-  const [board, setBoard] = useState(boardReseter);
+  const [allowedLetters, setAllowedLetter] = useState([
+    "Q",
+    "W",
+    "E",
+    "R",
+    "T",
+    "Y",
+    "U",
+    "I",
+    "O",
+    "P",
+    "A",
+    "S",
+    "D",
+    "F",
+    "G",
+    "H",
+    "J",
+    "K",
+    "L",
+    "Z",
+    "X",
+    "C",
+    "V",
+    "B",
+    "N",
+    "M",
+  ]);
+  const [guessInput, setGuessInput] = useState([]);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [correctWord, setCorrectWord] = useState("");
   const [disabledLetters, setDisabledLetters] = useState([]);
@@ -29,86 +49,112 @@ function App() {
     gameOver: false,
     guessedWord: false,
   });
+  const [gameResults, setGameResults] = useState(null);
+  const [gameIsFinished, setGameIsFinished] = useState(false);
   const [gameRunning, setGameRunning] = useState(false);
   const [gameRestart, setGameRestart] = useState(false);
-  const [boardReset, setBoardReset] = useState(false);
-  const [guessInput, setGuessInput] = useState([]);
+  const [apiResponse, setApiResponse] = useState([[]]); //Empty board which gets populated
+  const [gameTime, setGameTime] = useState(0);
 
   async function startGame() {
     if (gameRestart === true && gameRunning === true) {
       setCurrAttempt({ attempt: 0, letter: 0 });
-      setBoardReset(true);
+      const { wordLength, duplicate } = settings;
+      const res = await GetWord(wordLength, duplicate);
+
+      setCorrectWord(res.secretWord.word);
+      setApiResponse(res.results);
     } else if (gameRunning === false) {
-      setGameRunning(true);
-      GetWord({ settings }).then((words) => {
-        setCorrectWord(words.data);
-      });
+      const { wordLength, duplicate } = settings;
+      const res = await GetWord(wordLength, duplicate);
+
+      setCorrectWord(res.secretWord.word);
+      setApiResponse(res.results);
     }
   }
 
-  useEffect(() => {
-    startGame();
-  }, [settings]);
+  function setInputField() {
+    const wordLength = settings.wordLength;
+    const inputReseter = [];
+
+    for (let i = 0; i < wordLength; i++) {
+      inputReseter.push("");
+    }
+    setGuessInput(inputReseter);
+  }
 
   useEffect(() => {
-    handleSubmit(guessInput);
-  }, [guessInput]);
+    setInputField();
+    startGame();
+    setGameRunning(false);
+  }, [settings]);
 
   const onEnter = () => {
     if (currAttempt.letter !== settings.wordLength) return;
     let currWord = "";
     for (let i = 0; i < settings.wordLength; i++) {
-      currWord += board[currAttempt.attempt][i];
+      currWord += guessInput[i];
     }
+
+    handleSubmit(currWord, correctWord);
 
     setCurrAttempt({ attempt: currAttempt.attempt + 1, letter: 0 });
     if (currWord.toLocaleLowerCase() === correctWord) {
-      setGameOver({ gameOver: true, guessedWord: true });
+      setGameRunning(false);
+      setGameIsFinished(true);
+      setGameResults({
+        isWin: true,
+        guesses: currAttempt.attempt,
+        score: "9000",
+        time: gameTime,
+      });
       return;
     }
-    if (currAttempt.attempt === 5) {
+    if (currAttempt.attempt === 4) {
+      setGameIsFinished(true);
+      setGameResults({
+        isWin: false,
+        guesses: "You need more",
+        score: "You wish",
+      });
       setGameOver({ gameOver: true, guessedWord: false });
       return;
     }
+    console.log(apiResponse);
+    setInputField();
   };
 
   const onDelete = () => {
     if (currAttempt.letter === 0) return;
-    const newBoard = [...board];
-    newBoard[currAttempt.attempt][currAttempt.letter - 1] = "";
-    setBoard(newBoard);
+    const newGuessInput = [...guessInput];
+    newGuessInput[currAttempt.letter - 1] = "";
+    setGuessInput(newGuessInput);
     setCurrAttempt({ ...currAttempt, letter: currAttempt.letter - 1 });
   };
 
   const onSelectLetter = (key) => {
     if (currAttempt.letter >= settings.wordLength) return;
-    if (boardReset === true && currAttempt.letter === 0) {
-      setBoardReset(false);
-      setBoard(boardReseter);
-      const newBoard = [...boardReseter];
-      newBoard[currAttempt.attempt][currAttempt.letter] = key;
-      setBoard(newBoard);
-      setCurrAttempt({
-        attempt: currAttempt.attempt,
-        letter: currAttempt.letter + 1,
-      });
-    } else if (boardReset === false) {
-      const newBoard = [...board];
-      newBoard[currAttempt.attempt][currAttempt.letter] = key;
-      setBoard(newBoard);
-      setCurrAttempt({
-        attempt: currAttempt.attempt,
-        letter: currAttempt.letter + 1,
-      });
+    if (gameRunning === false && gameIsFinished === false) {
+      setGameTime(0);
+      setGameRunning(true);
     }
+    const newGuessInput = [...guessInput];
+    newGuessInput[currAttempt.letter] = key;
+
+    setGuessInput(newGuessInput);
+    setCurrAttempt({
+      attempt: currAttempt.attempt,
+      letter: currAttempt.letter + 1,
+    });
   };
 
-  async function handleSubmit(guessInput) {
-    if (currAttempt.attempt > 0 && currAttempt.attempt < 6) {
+  async function handleSubmit(guess, correctWord) {
+    if (currAttempt.attempt < 6) {
       const dataSend = {
-        guessInput,
+        guess,
         correctWord,
       };
+      console.log(correctWord);
       const res = await fetch("/api/guess", {
         method: "POST",
         headers: {
@@ -118,11 +164,36 @@ function App() {
       });
 
       const data = await res.json();
-      console.log(data);
 
-      return data;
+      apiResponse[currAttempt.attempt] = data;
     }
   }
+
+  const handleKeyboard = useCallback(
+    (event) => {
+      if (gameOver.gameOver) return;
+      if (event.key === "Enter") {
+        onEnter();
+      } else if (event.key === "Backspace") {
+        onDelete();
+      } else {
+        allowedLetters.forEach((key) => {
+          if (event.key.toUpperCase() === key.toUpperCase()) {
+            onSelectLetter(key);
+          }
+        });
+      }
+    },
+    [currAttempt, apiResponse]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyboard);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyboard);
+    };
+  }, [handleKeyboard]);
 
   return (
     <div className="App h-screen w-screen bg-gray-800">
@@ -156,8 +227,6 @@ function App() {
       />
       <AppContext.Provider
         value={{
-          board,
-          setBoard,
           currAttempt,
           setCurrAttempt,
           correctWord,
@@ -167,15 +236,14 @@ function App() {
           setDisabledLetters,
           disabledLetters,
           gameOver,
-          boardReset,
+          apiResponse,
+          gameTime,
+          setGameTime,
+          gameRunning,
         }}>
+        <Timer />
         {!gameRestart ? (
-          <Board
-            settings={settings}
-            onMerge={(data) => {
-              setGuessInput(data);
-            }}
-          />
+          <Board apiResponse={apiResponse} attempt={currAttempt.attempt} />
         ) : (
           <ResetPrompt
             gameRestart={gameRestart}
@@ -184,7 +252,23 @@ function App() {
             }}
           />
         )}
-        {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+
+        <InputField guessInput={guessInput} />
+
+        {gameIsFinished && gameResults && (
+          <GameOver
+            correctWord={correctWord}
+            isWin={gameResults.isWin}
+            score={gameResults.score}
+            guesses={gameResults.guesses}
+            duplicate={settings.checked}
+            gameRestart={gameRestart}
+            gameTime={gameTime}
+            onRestart={(data) => {
+              setGameRestart(data);
+            }}
+          />
+        )}
       </AppContext.Provider>
     </div>
   );

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import fetchWordList from "../../controllers/fetchWordList.js";
 import randomWord from "../../controllers/randomWord.js";
 import guessingGame from "../../controllers/guessingGame.js";
+import initGrid from "../../controllers/GameBoard.js";
 
 // import { Task } from "../database/mongoDB.js";
 const app = express();
@@ -23,19 +24,35 @@ app.get("/info", (req, res) => {
 });
 
 app.post("/api/guess", (req, res) => {
-  const guess = req.body.dataSend.guessInput.join("").toString();
+  const guess = req.body.dataSend.guess;
   const correctWord = req.body.dataSend.correctWord;
+
   const results = guessingGame(guess, correctWord);
+
   res.status(200).send(results);
 });
 
 app.post("/api/secret", async (req, res) => {
-  const wordLength = req.body.settings.wordLength;
-  const duplicate = req.body.settings.checked;
+  const wordLength = parseInt(req.query.wordLength);
+  const duplicate = req.query.duplicate;
+
   const wordList = await fetchWordList(wordLength, duplicate);
 
   const secretWord = randomWord(wordList);
-  res.status(200).send(secretWord);
+  const results = initGrid(5, wordLength);
+  res.status(200);
+
+  res.json({
+    secretWord,
+    results,
+  });
+});
+
+app.post("/api/highscore", async (req, res) => {
+  const name = req;
+  console.log(req.body);
+
+  res.status(200);
 });
 
 export default app;

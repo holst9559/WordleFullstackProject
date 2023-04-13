@@ -60,6 +60,5 @@ export default function guessingGame(guessInput, answerInput) {
     matchCounter = 0;
   }
 
-  console.log(resultArray);
   return resultArray;
 }
