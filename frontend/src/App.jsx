@@ -127,6 +127,7 @@ function App() {
       setGameOver({ gameOver: true, guessedWord: false });
       return;
     }
+    console.log(correctWord);
     setInputField();
   };
 

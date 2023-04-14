@@ -1,11 +1,12 @@
 import express from "express";
 import { engine } from "express-handlebars";
-import mongoose from "mongoose";
 import fetchWordList from "../../controllers/fetchWordList.js";
 import randomWord from "../../controllers/randomWord.js";
 import guessingGame from "../../controllers/guessingGame.js";
 import initGrid from "../../controllers/gameBoard.js";
 import handleScore from "../../controllers/handleScore.js";
+import HighscoreTemplate from "../../database/hsTemplate.js";
+import getSessionTime from "../../controllers/getSessionTime.js";
 
 // import { Task } from "../database/mongoDB.js";
 const app = express();
@@ -49,12 +50,50 @@ app.post("/api/secret", async (req, res) => {
   });
 });
 
+/*
+app.get("/api/highscore", async (req,res) => {
+  const data = await 
+});
+*/
+
 app.post("/api/highscore", async (req, res) => {
-  const data = req.body.data;
+  const dataHighscore = req.body.data;
 
-  handleScore(data);
+  const name = dataHighscore.name;
+  const startTime = dataHighscore.startTime;
+  const endTime = dataHighscore.endTime;
+  const guesses = dataHighscore.guesses;
+  const wordLength = dataHighscore.wordLength;
+  const duplicate = dataHighscore.duplicate;
 
-  res.status(200);
+  if (!name) {
+    res
+      .status(400)
+      .json({ error: "Could not post highscore, please enter a name!" });
+    return;
+  }
+
+  const time = await getSessionTime(startTime, endTime);
+  const score = await handleScore(startTime, endTime, guesses, wordLength);
+
+  const highscore = new HighscoreTemplate({
+    name,
+    guesses,
+    time,
+    score,
+    wordLength,
+    duplicate,
+  });
+
+  try {
+    await highscore.save();
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "There was a problem posting your highscore" });
+    return;
+  }
+  res.status(200).json({ success: "Highscore was succesfully posted" });
 });
 
 export default app;

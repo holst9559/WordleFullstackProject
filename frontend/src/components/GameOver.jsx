@@ -36,9 +36,7 @@ export default function GameOver({
       body: JSON.stringify({ data }),
     });
 
-    const dataRes = await res.json();
-
-    const { error = "", sucess = "" } = await res.json();
+    const { error = "", success = "" } = await res.json();
     setError(error);
     setSuccess(success);
   }
@@ -54,6 +52,8 @@ export default function GameOver({
           <p className="text-4xl text-gray-700 p-2 font-bold underline">
             {correctWord.toUpperCase()}
           </p>
+          {success && <p className="text-3xl text-green-700 p-2">{success}</p>}
+          {error && <p className="text-3xl text-red-700 p-2"> {error}</p>}
 
           <div className="mt-5 mb-10">
             <h1 className="text-3xl text-gray-700 p-2">Save score?</h1>
@@ -65,7 +65,8 @@ export default function GameOver({
                 <input
                   className="bg-gray-200 rounded-xl w-80 h-14 border-2 border-black text-3xl text-gray-700 pl-2"
                   type="text"
-                  id="input"></input>
+                  id="input"
+                  required></input>
               </div>
               <button
                 className="flex border-2 text-4xl p-2 mt-4 mb-4 ml-auto mr-auto bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
