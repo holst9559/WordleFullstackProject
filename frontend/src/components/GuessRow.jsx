@@ -1,7 +1,7 @@
-export default function GuessRow({ testResponse }) {
+export default function GuessRow({ currWord }) {
   return (
     <div className="board-row row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
-      {testResponse.map((res, index) => {
+      {currWord.map((res, index) => {
         const { letter, result } = res;
         return (
           <div

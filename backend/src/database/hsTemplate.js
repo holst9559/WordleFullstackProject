@@ -1,13 +1,12 @@
-import mongoose from "mongoose";
-const { Schema } = mongoose;
+import { Schema, model } from "mongoose";
 
-const highscoreTemplate = new mongoose({
+const highscoreTemplate = new Schema({
   name: {},
   guesses: {},
   time: {},
   score: {},
-  settings: {
-    wordLength: {},
-    duplicate: {},
-  },
+  wordLength: {},
+  duplicate: {},
 });
+
+export default highscoreTemplate;

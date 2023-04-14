@@ -55,6 +55,8 @@ function App() {
   const [gameRestart, setGameRestart] = useState(false);
   const [apiResponse, setApiResponse] = useState([[]]); //Empty board which gets populated
   const [gameTime, setGameTime] = useState(0);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   async function startGame() {
     if (gameRestart === true && gameRunning === true) {
@@ -89,6 +91,14 @@ function App() {
     setGameRunning(false);
   }, [settings]);
 
+  useEffect(() => {
+    if (startTime === null) {
+      setStartTime(new Date());
+    } else if (startTime !== null) {
+      setEndTime(new Date());
+    }
+  }, [gameTime]);
+
   const onEnter = () => {
     if (currAttempt.letter !== settings.wordLength) return;
     let currWord = "";
@@ -105,23 +115,20 @@ function App() {
       setGameResults({
         isWin: true,
         guesses: currAttempt.attempt,
-        score: "9000",
-        time: gameTime,
       });
       return;
     }
     if (currAttempt.attempt === 4) {
+      setGameRunning(false);
       setGameIsFinished(true);
       setGameResults({
         isWin: false,
-        guesses: "You need more",
-        score: "You wish",
       });
       setGameOver({ gameOver: true, guessedWord: false });
       return;
     }
-    console.log(apiResponse);
     setInputField();
+    console.log(startTime.toString());
   };
 
   const onDelete = () => {
@@ -259,11 +266,11 @@ function App() {
           <GameOver
             correctWord={correctWord}
             isWin={gameResults.isWin}
-            score={gameResults.score}
-            guesses={gameResults.guesses}
+            guesses={gameResults.guesses + 1}
             duplicate={settings.checked}
             gameRestart={gameRestart}
-            gameTime={gameTime}
+            startTime={startTime}
+            endTime={endTime}
             onRestart={(data) => {
               setGameRestart(data);
             }}

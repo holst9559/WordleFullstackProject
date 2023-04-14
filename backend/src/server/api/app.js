@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 import fetchWordList from "../../controllers/fetchWordList.js";
 import randomWord from "../../controllers/randomWord.js";
 import guessingGame from "../../controllers/guessingGame.js";
-import initGrid from "../../controllers/GameBoard.js";
+import initGrid from "../../controllers/gameBoard.js";
+import handleScore from "../../controllers/handleScore.js";
 
 // import { Task } from "../database/mongoDB.js";
 const app = express();
@@ -49,8 +50,9 @@ app.post("/api/secret", async (req, res) => {
 });
 
 app.post("/api/highscore", async (req, res) => {
-  const name = req;
-  console.log(req.body);
+  const data = req.body.data;
+
+  handleScore(data);
 
   res.status(200);
 });

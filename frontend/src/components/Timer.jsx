@@ -9,7 +9,6 @@ export default function Timer() {
     if (gameRunning) {
       intervalId = setInterval(() => setGameTime(gameTime + 1), 10);
     }
-
     return () => clearInterval(intervalId);
   }, [gameTime, gameRunning]);
 

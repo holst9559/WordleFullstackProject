@@ -5,15 +5,14 @@ export default function GameOver({
   correctWord,
   isWin,
   guesses,
-  score,
   gameRestart,
   onRestart,
   duplicate,
-  gameTime,
+  startTime,
+  endTime,
 }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
   async function handleSubmit(e) {
     e.preventDefault();
     const name = e.target.input.value;
@@ -22,10 +21,11 @@ export default function GameOver({
     const data = {
       name,
       correctWord,
-      score,
       wordLength,
       duplicate,
-      gameTime,
+      guesses,
+      startTime,
+      endTime,
     };
 
     const res = await fetch("/api/highscore", {
