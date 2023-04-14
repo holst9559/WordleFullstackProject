@@ -17,8 +17,15 @@ app.set("view engine", "handlebars");
 app.use(express.json());
 app.use(express.static("../frontend/dist"));
 
-app.get("/highscores", (req, res) => {
-  res.render("highscores");
+app.get("/highscores", async (req, res) => {
+  const highscores = await HighscoreTemplate.find();
+
+  highscores.sort((a, b) => {
+    return b.score - a.score;
+  });
+  res.render("highscores", {
+    highscores: highscores.map((entry) => entry.toObject()),
+  });
 });
 
 app.get("/info", (req, res) => {
@@ -49,12 +56,6 @@ app.post("/api/secret", async (req, res) => {
     results,
   });
 });
-
-/*
-app.get("/api/highscore", async (req,res) => {
-  const data = await 
-});
-*/
 
 app.post("/api/highscore", async (req, res) => {
   const dataHighscore = req.body.data;

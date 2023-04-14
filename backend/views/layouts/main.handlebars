@@ -4,30 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/handlebars-d5dd1ad9.css" />
+    <script src="/assets/main-b9817257.js"></script>
     <title>Wordle clone</title>
 
 </head>
-<body>  
-    <header class="header">
-        <h1>WORDLE</h1>
-
-        <nav class="main-nav">
-            <ul class="nav-list">
-                <li class="nav-item ">
-                    <a href="/">Game</a>
-                </li>
-                <li class="nav-item ">
-                    <a href="/info">Info</a>
-                </li>
-                <li class="nav-item ">
-                    <a href="/highscores">Highscores</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
+<body class="app">  
+    <div>
+      <header class="title-header flex items-center flex-row h-20 border-b-2  bg-gray-800 opacity-90">
+        <a
+          class="title font-bold text-6xl ml-auto mr-auto text-white p-10 hover:opacity-50"
+          href="/">
+          WORDLE
+        </a>
+      </header>
+      <nav class="header bg-gray-800 flex items-center flex-row justify-center pt-2 opacity-90">
+        <a
+          class="header-highscore text-white text-3xl pr-6 hover:opacity-50"
+          href="/highscores">
+          Highscores
+        </a>
+        <a class="header-info text-white text-3xl pl-6 hover:opacity-50" href="/info">
+          Info
+        </a>
+      </nav>
     <div class="content-body">
         {{{body}}}
 
+    </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 export default function GuessRow({ currWord }) {
   return (
-    <div className="board-row row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1">
+    <div className="board-row row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mb-1 ">
       {currWord.map((res, index) => {
         const { letter, result } = res;
         return (

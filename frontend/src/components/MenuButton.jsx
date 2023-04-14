@@ -12,12 +12,13 @@ export default function MenuButton({ settings, onSave, onRestart }) {
 
   return (
     <>
-      <button className="fixed top-3 left-3 hover:opacity-50">
-        <img
-          className="w-14 "
-          src="../src/assets/settings.png"
-          onClick={toggleModal}
-        />
+      <button className="fixed top-3 left-5 hover:opacity-50">
+        <p
+          className="text-white text-3xl font-bold border-2 p-2 rounded-xl shadow-md shadow-black"
+          src="/settings.png"
+          onClick={toggleModal}>
+          Settings
+        </p>
       </button>
 
       {modal && (
@@ -71,12 +72,12 @@ export default function MenuButton({ settings, onSave, onRestart }) {
                 </div>
                 <div className="text-center pt-16">
                   <button
-                    className="border-2 text-4xl p-1 mr-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
+                    className="border-2 text-4xl p-1 mr-2 bg-gray-700 text-white rounded-2xl shadow-md shadow-black hover:opacity-50"
                     type="submit">
                     Save
                   </button>
                   <button
-                    className="border-2 text-4xl p-1 ml-2 bg-gray-700 text-white rounded-2xl shadow-2xl hover:opacity-50"
+                    className="border-2 text-4xl p-1 ml-2 bg-gray-700 text-white rounded-2xl shadow-md shadow-black hover:opacity-50"
                     onClick={toggleModal}>
                     Close
                   </button>
