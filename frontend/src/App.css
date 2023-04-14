@@ -1,0 +1,9 @@
+.tile-Correct {
+  background-color: green;
+}
+.tile-Misplaced {
+  background-color: darkgoldenrod;
+}
+.tile-Incorrect {
+  background-color: gray;
+}
