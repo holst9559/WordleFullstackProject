@@ -37,14 +37,10 @@ export default function GameOver({
     });
 
     const dataRes = await res.json();
-    console.log(dataRes);
 
     const { error = "", sucess = "" } = await res.json();
     setError(error);
     setSuccess(success);
-
-    console.log(error);
-    console.log(success);
   }
 
   if (isWin) {

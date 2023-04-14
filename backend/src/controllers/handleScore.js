@@ -12,7 +12,6 @@ export default async function handleScore(data) {
 
   const sessionTime = await getSessionTime(startTime, endTime);
   const score = calculateScore(sessionTime, guesses, wordLength);
-  console.log(score);
   /*
   const highScore = new highscoreTemplate({
     name,
@@ -23,7 +22,5 @@ export default async function handleScore(data) {
     duplicate,
   });
 
-  console.log(highScore);
-*/
-  console.log(sessionTime);
+  */
 }

@@ -128,7 +128,6 @@ function App() {
       return;
     }
     setInputField();
-    console.log(startTime.toString());
   };
 
   const onDelete = () => {
@@ -161,7 +160,6 @@ function App() {
         guess,
         correctWord,
       };
-      console.log(correctWord);
       const res = await fetch("/api/guess", {
         method: "POST",
         headers: {
