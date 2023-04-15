@@ -1,13 +1,11 @@
 * {
   font-family: sans-serif;
 }
-
 .app {
-  background-color: rgb(31 41 55);
+  background-color: #1f2937;
   padding: 0;
   margin: 0;
 }
-
 .title-header {
   display: flex;
   align-items: center;
@@ -15,26 +13,23 @@
   height: 5rem;
   border: 2px;
   border-bottom-style: solid;
-  border-color: white;
+  border-color: #fff;
   opacity: 0.9;
 }
-
 .title {
   font-weight: 700;
   font-size: 3.75rem;
   line-height: 1;
   margin: 0 auto;
-  color: white;
+  color: #fff;
   padding: 2.5rem;
   text-decoration: none;
 }
-
 .title:hover,
 .header-highscore:hover,
 .header-info:hover {
   opacity: 0.5;
 }
-
 .header {
   display: flex;
   align-items: center;
@@ -43,36 +38,51 @@
   padding: 0.5rem;
   opacity: 0.9;
 }
-
 .header-highscore,
 .header-info {
-  color: white;
+  color: #fff;
   font-size: 1.875rem;
   line-height: 2.25rem;
   padding-right: 1.5rem;
   text-decoration: none;
 }
-
 .highscores-div {
   display: flex;
 }
-
 .highscore-title {
-  color: white;
+  color: #fff;
   font-weight: 700;
   font-size: 5rem;
   margin: 0 auto;
   padding: 2.5rem;
+  width: -moz-fit-content;
   width: fit-content;
 }
 .highscore-list {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  width: -moz-fit-content;
   width: fit-content;
 }
-
 .highscore-element {
-  color: white;
+  color: #fff;
+  width: -moz-fit-content;
   width: fit-content;
+}
+.info-title {
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1;
+  margin: 0 auto;
+  color: #fff;
+  padding: 2.5rem;
+  text-decoration: none;
+}
+.info {
+  color: white;
+  max-width: 80vw;
+  position: relative;
+  margin: 0 auto;
+  font-size: 1.5rem;
 }

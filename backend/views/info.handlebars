@@ -1,9 +1,32 @@
 <div class="highscore-div">
-  <h1 class="highscore-title">Info</h1>
   <div class="highscore-list">
-    <p class="highscore-element">
-      Worlde-clone made with
-      React.js/Express/Node.js/MongoDB/Handlebars/TailwindCSS
+    <h2 class="highscore-element">
+      Worlde clone made with
+      <ul class="highscore-element">
+        <li>React.js</li>
+        <li>Express</li>
+        <li>Node.js</li>
+        <li>MongoDB</li>
+        <li>Handlebars</li>
+        <li>TailwindCSS</li>
+      </ul>
+    </h2>
+  </div>
+  <div class="highscore-list">
+    <h2 class="info-title">About this project</h2>
+    <p class="info">Frontend for the game is made in React.js while the game
+      logic itself is split between React.js and JS-functions on the backend.
+      This static page and the server side rendered page highscore is programmed
+      in handlebars on the server side. Most of the styling is done with
+      TailwindCSS and some of it is just plain CSS.
     </p>
+    <br /><br /><br />
+    <p class="info">
+      The highscores are sent to a database on MongoDB with Express running in
+      Node.js. The highscores are later fetched from MongoDB at the request from
+      the highscore-page. The highscores entries are sorted in descending order
+      depending on score.
+    </p>
+
   </div>
 </div>
