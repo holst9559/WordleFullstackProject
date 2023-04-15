@@ -7,42 +7,17 @@ import "./App.css";
 import ResetPrompt from "./components/ResetPrompt";
 import InputField from "./components/InputField";
 import Timer from "./components/Timer";
+import Keyboard from "./components/Keyboard";
 
 export const AppContext = createContext();
 
 function App() {
-  const [allowedLetters, setAllowedLetter] = useState([
-    "Q",
-    "W",
-    "E",
-    "R",
-    "T",
-    "Y",
-    "U",
-    "I",
-    "O",
-    "P",
-    "A",
-    "S",
-    "D",
-    "F",
-    "G",
-    "H",
-    "J",
-    "K",
-    "L",
-    "Z",
-    "X",
-    "C",
-    "V",
-    "B",
-    "N",
-    "M",
-  ]);
   const [guessInput, setGuessInput] = useState([]);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [correctWord, setCorrectWord] = useState("");
   const [disabledLetters, setDisabledLetters] = useState([]);
+  const [correctLetters, setCorrectLetters] = useState([]);
+  const [misplacedLetters, setMisplacedLetters] = useState([]);
   const [settings, setSettings] = useState({ wordLength: 5, checked: false });
   const [gameGrid, setGameGrid] = useState([settings.wordLength, 6]);
   const [gameOver, setGameOver] = useState({
@@ -60,6 +35,9 @@ function App() {
 
   async function startGame() {
     if (gameRestart === true && gameRunning === true) {
+      setDisabledLetters([]);
+      setCorrectLetters([]);
+      setMisplacedLetters([]);
       setCurrAttempt({ attempt: 0, letter: 0 });
       const { wordLength, duplicate } = settings;
       const res = await GetWord(wordLength, duplicate);
@@ -98,6 +76,24 @@ function App() {
       setEndTime(new Date());
     }
   }, [gameTime]);
+
+  useEffect(() => {
+    keyboardLetters();
+  }, [apiResponse[currAttempt.attempt - 1]]);
+
+  function keyboardLetters() {
+    if (currAttempt.attempt > 0) {
+      apiResponse[currAttempt.attempt - 1].forEach((key) => {
+        if (key.result === "Correct") {
+          setCorrectLetters((prev) => [...prev, key.letter.toUpperCase()]);
+        } else if (key.result === "Misplaced") {
+          setMisplacedLetters((prev) => [...prev, key.letter.toUpperCase()]);
+        } else if (key.result === "Incorrect") {
+          setDisabledLetters((prev) => [...prev, key.letter.toUpperCase()]);
+        }
+      });
+    }
+  }
 
   const onEnter = () => {
     if (currAttempt.letter !== settings.wordLength) return;
@@ -175,52 +171,25 @@ function App() {
     }
   }
 
-  const handleKeyboard = useCallback(
-    (event) => {
-      if (gameOver.gameOver) return;
-      if (event.key === "Enter") {
-        onEnter();
-      } else if (event.key === "Backspace") {
-        onDelete();
-      } else {
-        allowedLetters.forEach((key) => {
-          if (event.key.toUpperCase() === key.toUpperCase()) {
-            onSelectLetter(key);
-          }
-        });
-      }
-    },
-    [currAttempt, apiResponse]
-  );
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyboard);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyboard);
-    };
-  }, [handleKeyboard]);
-
   return (
     <div className="App h-screen w-screen bg-gray-800">
-      <header className="flex items-center flex-row h-20 border-b-2  bg-gray-800 opacity-90">
+      <header className="grid grid-cols-3 items-center h-20 border-b-2 bg-gray-800 opacity-90">
         <a
-          className="font-bold text-6xl ml-auto mr-auto text-white p-10 hover:opacity-50 "
+          className="grid font-bold text-6xl ml-auto mr-auto text-white hover:opacity-50 "
           href="/">
           WORDLE
         </a>
-      </header>
-      <nav className="bg-gray-800 flex items-center flex-row justify-center pt-2 opacity-90">
         <a
-          className=" text-white text-3xl pr-6 hover:opacity-50"
+          className="grid order-first justify-end text-white text-3xl mt-6 hover:opacity-50"
           href="/highscores">
           Highscores
         </a>
-        <a className="text-white text-3xl pl-6 hover:opacity-50" href="/info">
+        <a
+          className="grid order-last text-white text-3xl mt-6 hover:opacity-50"
+          href="/info">
           Info
         </a>
-      </nav>
-
+      </header>
       <MenuButton
         settings={settings}
         onSave={(data) => {
@@ -249,7 +218,11 @@ function App() {
         }}>
         <Timer />
         {!gameRestart ? (
-          <Board apiResponse={apiResponse} attempt={currAttempt.attempt} />
+          <Board
+            apiResponse={apiResponse}
+            attempt={currAttempt.attempt}
+            setDisabledLetters={setDisabledLetters}
+          />
         ) : (
           <ResetPrompt
             gameRestart={gameRestart}
@@ -260,6 +233,12 @@ function App() {
         )}
 
         <InputField guessInput={guessInput} />
+        <Keyboard
+          apiResponse={apiResponse}
+          disabledLetters={disabledLetters}
+          correctLetters={correctLetters}
+          misplacedLetters={misplacedLetters}
+        />
 
         {gameIsFinished && gameResults && (
           <GameOver
@@ -281,10 +260,3 @@ function App() {
 }
 
 export default App;
-
-/* <GameBoard guessArray={guessArray} settings={gameGrid} />
-
-      <div>
-        <GuessInput onGuess={handleSubmit} settings={settings} />
-      </div>
-      */

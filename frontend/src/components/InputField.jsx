@@ -4,7 +4,7 @@ export default function InputField(guessInput) {
   const guessArray = guessInput.guessInput;
 
   return (
-    <div className="input-row board-row row flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-3 mt-20 ">
+    <div className="input-row board-row row relative flex flex-row ml-auto mr-auto max-w-fit bg-gray-800 gap-2 bottom-6">
       {guessArray.map((letter, index) => {
         return (
           <div

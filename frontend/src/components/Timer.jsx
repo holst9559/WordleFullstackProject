@@ -17,7 +17,7 @@ export default function Timer() {
   const milliseconds = gameTime % 100;
 
   return (
-    <div className="game-time flex justify-center text-white text-3xl mt-4">
+    <div className="game-time flex relative justify-center mr-auto ml-auto bottom-14 text-white text-3xl">
       <div>
         {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}:

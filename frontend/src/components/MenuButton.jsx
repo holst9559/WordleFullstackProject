@@ -12,7 +12,7 @@ export default function MenuButton({ settings, onSave, onRestart }) {
 
   return (
     <>
-      <button className="fixed top-3 left-5 hover:opacity-50">
+      <button className="relative left-4 bottom-16 hover:opacity-50">
         <p
           className="text-white text-3xl font-bold border-2 p-2 rounded-xl shadow-md shadow-black"
           src="/settings.png"
@@ -22,7 +22,7 @@ export default function MenuButton({ settings, onSave, onRestart }) {
       </button>
 
       {modal && (
-        <div className="fixed inset-0 flex justify-center bg-opacity-30 backdrop-blur-sm">
+        <div className="fixed z-10 inset-0 flex justify-center bg-opacity-30 backdrop-blur-sm">
           <div className=""></div>
           <div className="p-2 mt-32 rounded-xl w-2/5 h-2/5 bg-white">
             <h1 className="text-center font-semibold text-6xl text-gray-700 pt-5">
