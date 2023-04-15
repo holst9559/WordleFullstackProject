@@ -48,7 +48,6 @@ app.post("/api/secret", async (req, res) => {
 
   const wordListFetch = await wordsFetch();
   const wordList = await filterWordList(wordListFetch, wordLength, duplicate);
-
   const secretWord = randomWord(wordList);
   const results = initGrid(5, wordLength);
   res.status(200);
@@ -61,13 +60,15 @@ app.post("/api/secret", async (req, res) => {
 
 app.post("/api/highscore", async (req, res) => {
   const dataHighscore = req.body.data;
+  console.log(dataHighscore);
 
   const name = dataHighscore.name;
   const startTime = dataHighscore.startTime;
   const endTime = dataHighscore.endTime;
   const guesses = dataHighscore.guesses;
   const wordLength = dataHighscore.wordLength;
-  const duplicate = dataHighscore.duplicate;
+  const duplicate = dataHighscore.duplicateRefactor;
+  console.log(duplicate);
 
   if (!name) {
     res

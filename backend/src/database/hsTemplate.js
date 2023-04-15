@@ -6,7 +6,7 @@ const HighscoreTemplate = mongoose.model("HighscoreTemplate", {
   time: Number,
   score: Number,
   wordLength: Number,
-  duplicate: Boolean,
+  duplicate: String,
 });
 
 export default HighscoreTemplate;

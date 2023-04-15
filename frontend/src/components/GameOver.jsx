@@ -18,11 +18,19 @@ export default function GameOver({
     const name = e.target.input.value;
     const wordLength = correctWord.length;
 
+    let duplicateRefactor;
+
+    if (duplicate === true) {
+      duplicateRefactor = "Yes";
+    } else if (duplicate === false) {
+      duplicateRefactor = "No";
+    }
+
     const data = {
       name,
       correctWord,
       wordLength,
-      duplicate,
+      duplicateRefactor,
       guesses,
       startTime,
       endTime,
