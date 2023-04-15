@@ -1,8 +1,4 @@
 import { guessObject } from "./guessObject.js";
-
-const answerInput = "Kaffe";
-const guessInput = "Affke";
-
 export default function guessingGame(guessInput, answerInput) {
   const resultArray = [new Array(guessInput.length)];
 

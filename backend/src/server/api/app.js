@@ -1,12 +1,13 @@
 import express from "express";
 import { engine } from "express-handlebars";
-import fetchWordList from "../../controllers/fetchWordList.js";
+import filterWordList from "../../controllers/filterWordList.js";
 import randomWord from "../../controllers/randomWord.js";
 import guessingGame from "../../controllers/guessingGame.js";
 import initGrid from "../../controllers/gameBoard.js";
 import handleScore from "../../controllers/handleScore.js";
 import HighscoreTemplate from "../../database/hsTemplate.js";
 import getSessionTime from "../../controllers/getSessionTime.js";
+import wordsFetch from "../../controllers/ApiAdapter.js";
 
 // import { Task } from "../database/mongoDB.js";
 const app = express();
@@ -45,7 +46,8 @@ app.post("/api/secret", async (req, res) => {
   const wordLength = parseInt(req.query.wordLength);
   const duplicate = req.query.duplicate;
 
-  const wordList = await fetchWordList(wordLength, duplicate);
+  const wordListFetch = await wordsFetch();
+  const wordList = await filterWordList(wordListFetch, wordLength, duplicate);
 
   const secretWord = randomWord(wordList);
   const results = initGrid(5, wordLength);
