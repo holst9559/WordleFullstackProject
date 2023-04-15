@@ -1,1 +1,16 @@
-<h1>HIGHSCORES</h1>
+<div class="highscore-div">
+  <h1
+    class="highscore-title font-bold text-6xl ml-auto mr-auto text-white p-10 hover:opacity-50"
+  >HIGHSCORES</h1>
+  <ol class="highscore-list">
+    {{#each highscores}}
+      <li class="highscore-element">
+        <p>{{this.name}}</p>
+        <p>Score: {{this.score}}</p>
+        <p>Wordlength: {{this.wordLength}}</p>
+        <p>Duplicate letters in use: {{this.duplicate}}</p>
+        <p>Time: {{this.time}} seconds</p>
+      </li>
+    {{/each}}
+  </ol>
+</div>

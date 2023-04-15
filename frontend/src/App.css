@@ -1,9 +1,9 @@
-.tile-Correct {
-  background-color: green;
+#Correct {
+  background-color: #538d4e;
 }
-.tile-Misplaced {
-  background-color: darkgoldenrod;
+#Misplaced {
+  background-color: #b59f3b;
 }
-.tile-Incorrect {
-  background-color: gray;
+#Incorrect {
+  background-color: rgb(51, 48, 48);
 }
