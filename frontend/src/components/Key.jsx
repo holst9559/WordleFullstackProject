@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { AppContext } from "../App";
 
-function Key({ keyVal, bigKey, disabled, correct, misplaced, apiResponse }) {
-  const { gameOver, onSelectLetter, onDelete, onEnter } =
-    useContext(AppContext);
+function Key({ keyVal, disabled, correct, misplaced, onSelectLetter }) {
+  const { gameOver, onDelete, onEnter } = useContext(AppContext);
   const selectLetter = () => {
     if (gameOver.gameOver) return;
     if (keyVal === "ENTER") {

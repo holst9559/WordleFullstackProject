@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext, useCallback } from "react";
+import { useEffect, useState, createContext } from "react";
 import Board from "./components/GameBoard";
 import MenuButton from "./components/MenuButton";
 import GameOver from "./components/GameOver";
@@ -28,7 +28,7 @@ function App() {
   const [gameIsFinished, setGameIsFinished] = useState(false);
   const [gameRunning, setGameRunning] = useState(false);
   const [gameRestart, setGameRestart] = useState(false);
-  const [apiResponse, setApiResponse] = useState([[]]); //Empty board which gets populated
+  const [apiResponse, setApiResponse] = useState([[]]);
   const [gameTime, setGameTime] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -114,7 +114,7 @@ function App() {
       });
       return;
     }
-    if (currAttempt.attempt === 4) {
+    if (currAttempt.attempt === 5) {
       setGameRunning(false);
       setGameIsFinished(true);
       setGameResults({
@@ -123,7 +123,6 @@ function App() {
       setGameOver({ gameOver: true, guessedWord: false });
       return;
     }
-    console.log(correctWord);
     setInputField();
   };
 
@@ -137,6 +136,12 @@ function App() {
 
   const onSelectLetter = (key) => {
     if (currAttempt.letter >= settings.wordLength) return;
+    if (
+      disabledLetters.includes(key.toUpperCase()) &&
+      !correctLetters.includes(key.toUpperCase())
+    ) {
+      return;
+    }
     if (gameRunning === false && gameIsFinished === false) {
       setGameTime(0);
       setGameRunning(true);
@@ -202,16 +207,9 @@ function App() {
       />
       <AppContext.Provider
         value={{
-          currAttempt,
-          setCurrAttempt,
-          correctWord,
-          onSelectLetter,
           onDelete,
           onEnter,
-          setDisabledLetters,
-          disabledLetters,
           gameOver,
-          apiResponse,
           gameTime,
           setGameTime,
           gameRunning,
@@ -238,6 +236,11 @@ function App() {
           disabledLetters={disabledLetters}
           correctLetters={correctLetters}
           misplacedLetters={misplacedLetters}
+          currAttempt={currAttempt}
+          gameOver={gameOver}
+          onSelectLetter={onSelectLetter}
+          onEnter={onEnter}
+          onDelete={onDelete}
         />
 
         {gameIsFinished && gameResults && (

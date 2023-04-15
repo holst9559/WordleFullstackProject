@@ -10,12 +10,6 @@ export default function guessingGame(guessInput, answerInput) {
 
   const internalArray = [];
 
-  if (guessInput.length !== answerInput.length) {
-    return Error(
-      "Input is not the correct length, write a word containing 5 letters"
-    );
-  }
-
   //Loop to check if the position of the guess matches the answer
   for (let i = 0; i < answerArray.length; i++) {
     resultArray[i] = new guessObject(guessArray[i], "Incorrect");

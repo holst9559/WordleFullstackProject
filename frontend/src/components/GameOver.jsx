@@ -1,12 +1,9 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../App";
+import React, { useState } from "react";
 
 export default function GameOver({
   correctWord,
   isWin,
   guesses,
-  gameRestart,
-  onRestart,
   duplicate,
   startTime,
   endTime,
