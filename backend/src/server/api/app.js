@@ -9,7 +9,6 @@ import HighscoreTemplate from "../../database/hsTemplate.js";
 import getSessionTime from "../../controllers/getSessionTime.js";
 import wordsFetch from "../../controllers/ApiAdapter.js";
 
-// import { Task } from "../database/mongoDB.js";
 const app = express();
 
 app.engine("handlebars", engine());
@@ -24,13 +23,13 @@ app.get("/highscores", async (req, res) => {
   highscores.sort((a, b) => {
     return b.score - a.score;
   });
-  res.render("highscores", {
+  res.status(200).render("highscores", {
     highscores: highscores.map((entry) => entry.toObject()),
   });
 });
 
 app.get("/info", (req, res) => {
-  res.render("info");
+  res.status(200).render("info");
 });
 
 app.post("/api/guess", (req, res) => {
@@ -49,7 +48,7 @@ app.post("/api/secret", async (req, res) => {
   const wordListFetch = await wordsFetch();
   const wordList = await filterWordList(wordListFetch, wordLength, duplicate);
   const secretWord = randomWord(wordList);
-  const results = initGrid(5, wordLength);
+  const results = initGrid(6, wordLength);
   res.status(200);
 
   res.json({
@@ -60,7 +59,6 @@ app.post("/api/secret", async (req, res) => {
 
 app.post("/api/highscore", async (req, res) => {
   const dataHighscore = req.body.data;
-  console.log(dataHighscore);
 
   const name = dataHighscore.name;
   const startTime = dataHighscore.startTime;
@@ -68,7 +66,6 @@ app.post("/api/highscore", async (req, res) => {
   const guesses = dataHighscore.guesses;
   const wordLength = dataHighscore.wordLength;
   const duplicate = dataHighscore.duplicateRefactor;
-  console.log(duplicate);
 
   if (!name) {
     res

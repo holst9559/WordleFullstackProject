@@ -1,29 +1,25 @@
-import React, { useCallback, useEffect, useContext } from "react";
+import React, { useCallback, useEffect } from "react";
 import Key from "./Key";
-import { AppContext } from "../App";
 
 function Keyboard({
   apiResponse,
   disabledLetters,
   correctLetters,
   misplacedLetters,
+  currAttempt,
+  gameOver,
+  onSelectLetter,
+  onEnter,
+  onDelete,
 }) {
   const keys1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const keys2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const keys3 = ["Z", "X", "C", "V", "B", "N", "M"];
 
-  const { board, currAttempt, gameOver, onSelectLetter, onEnter, onDelete } =
-    useContext(AppContext);
-
   const handleKeyboard = useCallback(
     (event) => {
       if (gameOver.gameOver) return;
-      if (
-        disabledLetters.includes(event.key.toUpperCase()) &&
-        !correctLetters.includes(event.key.toUpperCase())
-      ) {
-        return;
-      }
+
       if (event.key === "Enter") {
         onEnter();
       } else if (event.key === "Backspace") {
@@ -64,11 +60,13 @@ function Keyboard({
         {keys1.map((key) => {
           return (
             <Key
+              key={key}
               keyVal={key}
               apiResponse={apiResponse}
               disabled={disabledLetters.includes(key)}
               correct={correctLetters.includes(key)}
               misplaced={misplacedLetters.includes(key)}
+              onSelectLetter={onSelectLetter}
             />
           );
         })}
@@ -77,29 +75,33 @@ function Keyboard({
         {keys2.map((key) => {
           return (
             <Key
+              key={key}
               keyVal={key}
               apiResponse={apiResponse}
               disabled={disabledLetters.includes(key)}
               correct={correctLetters.includes(key)}
               misplaced={misplacedLetters.includes(key)}
+              onSelectLetter={onSelectLetter}
             />
           );
         })}
       </div>
       <div className="line3 flex flex-row justify-center m-1">
-        <Key keyVal={"ENTER"} bigKey />
+        <Key keyVal={"ENTER"} />
         {keys3.map((key) => {
           return (
             <Key
+              key={key}
               keyVal={key}
               apiResponse={apiResponse}
               disabled={disabledLetters.includes(key)}
               correct={correctLetters.includes(key)}
               misplaced={misplacedLetters.includes(key)}
+              onSelectLetter={onSelectLetter}
             />
           );
         })}
-        <Key keyVal={"DEL"} bigKey />
+        <Key keyVal={"DEL"} />
       </div>
     </div>
   );

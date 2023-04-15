@@ -1,4 +1,3 @@
-import fs from "fs/promises";
 import duplicateLetters from "./duplicateLetters.js";
 
 export default async function filterWordList(wordList, wordLength, duplicate) {
